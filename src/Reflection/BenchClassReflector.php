@@ -25,6 +25,7 @@ class BenchClassReflector
 
 	public function getBenchCallables()
 	{
+		// @todo what to do with these?
 		$classAnnotations = $this->annotationReader->getClassAnnotations($this->refl);
 
 		$rmethods = $this->refl->getMethods(ReflectionMethod::IS_PUBLIC);

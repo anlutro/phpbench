@@ -9,10 +9,12 @@
 
 namespace anlutro\PHPBench\Annotations;
 
+use anlutro\PHPBench\Benchmark\Benchmark;
+
 /**
  * @Annotation
  */
-class Iterations
+class Iterations implements AnnotationInterface
 {
 	protected $iterations;
 
@@ -21,8 +23,8 @@ class Iterations
 		$this->iterations = (int) $values['value'];
 	}
 
-	public function getNumIterations()
+	public function invoke(Benchmark $benchmark)
 	{
-		return $this->iterations;
+		$benchmark->setIterations($this->iterations);
 	}
 }

@@ -26,17 +26,28 @@ class BenchClassReflectorTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $refl->getBenchCallables());
 	}
 
+	public function testReflectorGetsAnnotations()
+	{
+		$antreader = $this->makeMockAnnotationsReader(array(), array('SomeAnnotation'));
+		$refl = $this->makeReflector('SomeClassStub', $antreader);
+		$expected = array(
+			$this->makeCallback(array('SomeClassStub', 'benchFoo'), array('SomeAnnotation')),
+			$this->makeCallback(array('SomeClassStub', 'benchBar'), array('SomeAnnotation')),
+		);
+		$this->assertEquals($expected, $refl->getBenchCallables());
+	}
+
 	protected function makeReflector($class, $reader = null)
 	{
 		if ($reader === null) $reader = $this->makeMockAnnotationsReader();
 		return new anlutro\PHPBench\Reflection\BenchClassReflector($class, $reader);
 	}
 
-	protected function makeMockAnnotationsReader()
+	protected function makeMockAnnotationsReader($class = array(), $method = array())
 	{
 		$mock = m::mock('Doctrine\Common\Annotations\AnnotationReader');
-		$mock->shouldReceive('getClassAnnotations')->andReturn(array());
-		$mock->shouldReceive('getMethodAnnotations')->andReturn(array());
+		$mock->shouldReceive('getClassAnnotations')->andReturn($class);
+		$mock->shouldReceive('getMethodAnnotations')->andReturn($method);
 		return $mock;
 	}
 

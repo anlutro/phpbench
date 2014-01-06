@@ -10,7 +10,7 @@
 namespace anlutro\PHPBench\Benchmark;
 
 use anlutro\PHPBench\Reflection\Callback;
-use anlutro\PHPBench\Annotations\Iterations;
+use anlutro\PHPBench\Annotations\AnnotationInterface;
 
 class Benchmark
 {
@@ -33,6 +33,11 @@ class Benchmark
 		return (int) $this->iterations;
 	}
 
+	public function setIterations($value)
+	{
+		$this->iterations = (int) $value;
+	}
+
 	public function run()
 	{
 		$start = microtime(true);
@@ -50,8 +55,8 @@ class Benchmark
 	{
 		$annotations = $this->callback->getAnnotations();
 		foreach ($annotations as $annotation) {
-			if ($annotation instanceof Iterations) {
-				$this->iterations = $annotation->getNumIterations();
+			if ($annotation instanceof AnnotationInterface) {
+				$annotation->invoke($this);
 			}
 		}
 	}
@@ -63,7 +68,7 @@ class Benchmark
 		}
 	}
 
-	public function makeResult($elapsed)
+	protected function makeResult($elapsed)
 	{
 		return new Result($this, $elapsed);
 	}
