@@ -12,9 +12,9 @@
         "psr-4": {
             "anlutro\\PHPBench\\": "src/"
         },
-        "files": {
+        "files": [
             "src/PHPBenchCase.php"
-        }
+        ]
     },
     "minimum-stability": "stable",
     "require": {
