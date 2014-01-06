@@ -82,10 +82,11 @@ class BenchmarkCommand extends Command
 
 	public function getBenchmarks(array $classes)
 	{
+		$annotReader = $this->resolve('annotations.reader');
 		$benchmarks = [];
 
 		foreach ($classes as $class) {
-			$refl = new BenchClassReflector($class);
+			$refl = new BenchClassReflector($class, $annotReader);
 
 			foreach ($refl->getBenchCallables() as $callable) {
 				$benchmarks[] = new Benchmark($callable);
@@ -100,7 +101,11 @@ class BenchmarkCommand extends Command
 		$runner = new Runner($benchmarks);
 
 		foreach ($runner->getBenchmarks() as $bench) {
-			$this->out->write($bench->getCallableString() . '... ');
+			$callable = $bench->getCallableString();
+			$iter = $bench->getIterations();
+			$out = "Running $callable x $iter ... ";
+			$this->out->write($out);
+
 			$result = $bench->run();
 			$this->out->write($result->getElapsedString() . PHP_EOL);
 		}

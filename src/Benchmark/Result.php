@@ -9,12 +9,14 @@
 
 namespace anlutro\PHPBench\Benchmark;
 
+use anlutro\PHPBench\Reflection\Callback;
+
 class Result
 {
 	protected $callable;
 	protected $elapsed;
 
-	public function __construct($callable, $elapsed)
+	public function __construct(Callback $callable, $elapsed)
 	{
 		$this->callable = $callable;
 		$this->elapsed = $elapsed;

@@ -15,23 +15,31 @@ use ReflectionMethod;
 class BenchClassReflector
 {
 	protected $refl;
+	protected $annotationReader;
 
-	public function __construct($class)
+	public function __construct($class, $annotationReader)
 	{
 		$this->refl = new ReflectionClass($class);
+		$this->annotationReader = $annotationReader;
 	}
 
 	public function getBenchCallables()
 	{
+		$classAnnotations = $this->annotationReader->getClassAnnotations($this->refl);
+
 		$rmethods = $this->refl->getMethods(ReflectionMethod::IS_PUBLIC);
-		$methods = [];
+		$callbacks = [];
 
 		foreach ($rmethods as $method) {
 			if (substr($method->name, 0, 5) === 'bench') {
-				$methods[] = array($method->class, $method->name);
+				$annotations = $this->annotationReader->getMethodAnnotations($method);
+				$callable = array($method->class, $method->name);
+				$callback = new Callback($callable, $annotations);
+
+				$callbacks[] = $callback;
 			}
 		}
 
-		return $methods;
+		return $callbacks;
 	}
 }

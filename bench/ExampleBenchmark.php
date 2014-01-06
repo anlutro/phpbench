@@ -1,27 +1,31 @@
 <?php
+use anlutro\PHPBench\Annotations;
+
 class ExampleBenchmark
 {
+	/**
+	 * @Annotations\Iterations(500000)
+	 */
 	public function benchStrReplace()
 	{
-		for($i = 0; $i < 500000; $i++) {
-			$str = 'adsdf';
-			$str = str_replace('a', 'b', $str);
-			$str = str_replace('b', 'a', $str);
-			$str = str_replace('a', 'b', $str);
-			$str = str_replace('b', 'a', $str);
-			$str = str_replace('s', 'g', $str);
-			$str = str_replace('d', 't', $str);
-			$str = str_replace('f', 'n', $str);
-		}
+		$str = 'adsdf';
+		$str = str_replace('a', 'b', $str);
+		$str = str_replace('b', 'a', $str);
+		$str = str_replace('a', 'b', $str);
+		$str = str_replace('b', 'a', $str);
+		$str = str_replace('s', 'g', $str);
+		$str = str_replace('d', 't', $str);
+		$str = str_replace('f', 'n', $str);
 	}
 
+	/**
+	 * @Annotations\Iterations(500000)
+	 */
 	public function benchReflection()
 	{
-		for ($i=0; $i < 500000; $i++) { 
-			$class = new ReflectionClass($this);
-			foreach ($class->getMethods() as $method) {
-				// do nothing
-			}
+		$class = new ReflectionClass($this);
+		foreach ($class->getMethods() as $method) {
+			// do nothing
 		}
 	}
 }

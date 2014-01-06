@@ -9,30 +9,35 @@
 
 namespace anlutro\PHPBench\Benchmark;
 
+use anlutro\PHPBench\Reflection\Callback;
+use anlutro\PHPBench\Annotations\Iterations;
+
 class Benchmark
 {
-	public function __construct($callable)
+	protected $callback;
+	protected $iterations = 1;
+
+	public function __construct(Callback $callback)
 	{
-		$this->callable = $callable;
+		$this->callback = $callback;
+		$this->parseAnnotations();
 	}
 
 	public function getCallableString()
 	{
-		if (is_array($this->callable)) {
-			list($class, $method) = $this->callable;
-			return "$class::$method";
-		} elseif ($this->callable instanceof \Closure) {
-			return 'Closure';
-		} else {
-			return (string) $this->callable;
-		}
+		return $this->callback->getStringRepresentation();
+	}
+
+	public function getIterations()
+	{
+		return (int) $this->iterations;
 	}
 
 	public function run()
 	{
 		$start = microtime(true);
 
-		$this->callCallable();
+		$this->invokeCallback();
 
 		$end = microtime(true);
 
@@ -41,28 +46,25 @@ class Benchmark
 		return $this->makeResult($elapsed);
 	}
 
-	public function callCallable()
+	public function parseAnnotations()
 	{
-		if (is_array($this->callable)) {
-			list($class, $method) = $this->callable;
-			$obj = new $class;
-
-			if (!is_object($obj)) {
-				throw new \RuntimeException('$obj is not an object');
+		$annotations = $this->callback->getAnnotations();
+		foreach ($annotations as $annotation) {
+			if ($annotation instanceof Iterations) {
+				$this->iterations = $annotation->getNumIterations();
 			}
+		}
+	}
 
-			if (!is_callable([$obj, $method])) {
-				throw new \RuntimeException(get_class($obj) . '::' . $method . ' is not callable');
-			}
-
-			call_user_func([$obj, $method]);
-		} else {
-			call_user_func($this->callable);
+	public function invokeCallback()
+	{
+		for ($i=0; $i < $this->iterations; $i++) { 
+			$this->callback->invoke();
 		}
 	}
 
 	public function makeResult($elapsed)
 	{
-		return new Result($this->callable, $elapsed);
+		return new Result($this->callback, $elapsed);
 	}
 }

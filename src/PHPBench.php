@@ -3,6 +3,8 @@ namespace anlutro\PHPBench;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Pimple;
 
 class PHPBench extends Pimple
@@ -23,6 +25,16 @@ class PHPBench extends Pimple
 
 		$this['file.finder'] = $this->share(function() {
 			return new Finder;
+		});
+
+		$this['annotations.reader'] = $this->share(function() {
+			foreach (glob(__DIR__ . '/Annotations/*.php') as $file) {
+				AnnotationRegistry::registerFile($file);
+			}
+			
+			$reader = new AnnotationReader;
+			// $reader->setDefaultAnnotationNamespace('anlutro\\PHPBench\\Annotations\\');
+			return $reader;
 		});
 	}
 
