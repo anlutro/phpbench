@@ -23,7 +23,7 @@ class Runner
 
 	public function run()
 	{
-		$results = [];
+		$results = array();
 
 		foreach ($this->benches as $bench) {
 			$results[] = $bench->run();

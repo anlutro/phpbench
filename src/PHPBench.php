@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHPBench - PHP Benchmarking Framework
+ *
+ * @author    Andreas Lutro <anlutro@gmail.com>
+ * @license   http://opensource.org/licenses/MIT
+ * @package   phpbench
+ */
+
 namespace anlutro\PHPBench;
 
 use Symfony\Component\Filesystem\Filesystem;

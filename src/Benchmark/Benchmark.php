@@ -65,6 +65,6 @@ class Benchmark
 
 	public function makeResult($elapsed)
 	{
-		return new Result($this->callback, $elapsed);
+		return new Result($this, $elapsed);
 	}
 }

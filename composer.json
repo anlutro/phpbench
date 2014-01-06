@@ -23,5 +23,8 @@
         "symfony/event-dispatcher": "2.4.*",
         "doctrine/annotations": "1.*",
         "pimple/pimple": "1.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "dev-master"
     }
 }

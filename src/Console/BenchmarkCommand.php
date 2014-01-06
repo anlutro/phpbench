@@ -55,7 +55,7 @@ class BenchmarkCommand extends Command
 
 	public function getClasses($path)
 	{
-		$classes = [];
+		$classes = array();
 
 		foreach ($this->getFiles($path) as $file) {
 			$filename = $file->getFileName();
@@ -83,7 +83,7 @@ class BenchmarkCommand extends Command
 	public function getBenchmarks(array $classes)
 	{
 		$annotReader = $this->resolve('annotations.reader');
-		$benchmarks = [];
+		$benchmarks = array();
 
 		foreach ($classes as $class) {
 			$refl = new BenchClassReflector($class, $annotReader);

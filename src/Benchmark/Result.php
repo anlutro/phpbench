@@ -13,12 +13,12 @@ use anlutro\PHPBench\Reflection\Callback;
 
 class Result
 {
-	protected $callable;
+	protected $benchmark;
 	protected $elapsed;
 
-	public function __construct(Callback $callable, $elapsed)
+	public function __construct(Benchmark $benchmark, $elapsed)
 	{
-		$this->callable = $callable;
+		$this->benchmark = $benchmark;
 		$this->elapsed = $elapsed;
 	}
 

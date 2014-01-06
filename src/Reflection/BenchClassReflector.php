@@ -28,7 +28,7 @@ class BenchClassReflector
 		$classAnnotations = $this->annotationReader->getClassAnnotations($this->refl);
 
 		$rmethods = $this->refl->getMethods(ReflectionMethod::IS_PUBLIC);
-		$callbacks = [];
+		$callbacks = array();
 
 		foreach ($rmethods as $method) {
 			if (substr($method->name, 0, 5) === 'bench') {
