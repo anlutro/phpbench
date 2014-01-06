@@ -11,7 +11,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 {
 	public function testStaticMethodCallable()
 	{
-		$c = $this->makeCallback(['Foo', 'psf']);
+		$c = $this->makeCallback(array('Foo', 'psf'));
 
 		$this->assertTrue($c->isStaticMethod());
 		$this->assertFalse($c->isObjectMethod());
@@ -23,7 +23,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 
 	public function testMethodCallable()
 	{
-		$c = $this->makeCallback(['Foo', 'pf']);
+		$c = $this->makeCallback(array('Foo', 'pf'));
 		$this->assertFalse($c->isStaticMethod());
 		$this->assertTrue($c->isObjectMethod());
 		$this->assertFalse($c->isClosure());
@@ -37,7 +37,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testNonPublicMethod()
 	{
-		$c = $this->makeCallback(['Foo', 'prf']);
+		$c = $this->makeCallback(array('Foo', 'prf'));
 	}
 
 	/**
@@ -45,7 +45,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testNonPublicStaticMethod()
 	{
-		$c = $this->makeCallback(['Foo', 'prsf']);
+		$c = $this->makeCallback(array('Foo', 'prsf'));
 	}
 
 	public function testClosureCallable()
