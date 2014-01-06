@@ -1,0 +1,27 @@
+{
+    "name": "anlutro/phpbench",
+    "description": "PHP Benchmarking Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Lutro",
+            "email": "anlutro@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "anlutro\\PHPBench\\": "src/"
+        },
+        "files": {
+            "src/PHPBenchCase.php"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/console": "2.4.*",
+        "symfony/finder": "2.4.*",
+        "symfony/event-dispatcher": "2.4.*",
+        "doctrine/annotations": "1.*",
+        "pimple/pimple": "1.*"
+    }
+}
