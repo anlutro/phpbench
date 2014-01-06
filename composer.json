@@ -16,6 +16,9 @@
             "src/PHPBenchCase.php"
         ]
     },
+    "bin": [
+        "bin/phpbench"
+    ],
     "minimum-stability": "stable",
     "require": {
         "symfony/console": "2.4.*",
