@@ -31,8 +31,23 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
 	{
 		$callable = $this->makeMockCallable();
 		$callable->shouldReceive('getAnnotations')->andReturn(array());
+		$callable->shouldReceive('setUp')->once();
 		$callable->shouldReceive('invoke')->once();
+		$callable->shouldReceive('tearDown')->once();
 		$bench = $this->makeBenchmark($callable);
+
+		$bench->run();
+	}
+
+	public function testBenchmarkIterations()
+	{
+		$callable = $this->makeMockCallable();
+		$callable->shouldReceive('getAnnotations')->andReturn(array());
+		$callable->shouldReceive('setUp')->once();
+		$callable->shouldReceive('invoke')->times(5);
+		$callable->shouldReceive('tearDown')->once();
+		$bench = $this->makeBenchmark($callable);
+		$bench->setIterations(5);
 
 		$bench->run();
 	}

@@ -11,7 +11,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 {
 	public function testStaticMethodCallable()
 	{
-		$c = $this->makeCallback(array('Foo', 'psf'));
+		$c = $this->makeCallback(array('CallbackTestBasicStub', 'psf'));
 
 		$this->assertTrue($c->isStaticMethod());
 		$this->assertFalse($c->isObjectMethod());
@@ -23,7 +23,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 
 	public function testMethodCallable()
 	{
-		$c = $this->makeCallback(array('Foo', 'pf'));
+		$c = $this->makeCallback(array('CallbackTestBasicStub', 'pf'));
 		$this->assertFalse($c->isStaticMethod());
 		$this->assertTrue($c->isObjectMethod());
 		$this->assertFalse($c->isClosure());
@@ -37,7 +37,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testNonPublicMethod()
 	{
-		$c = $this->makeCallback(array('Foo', 'prf'));
+		$c = $this->makeCallback(array('CallbackTestBasicStub', 'prf'));
 	}
 
 	/**
@@ -45,7 +45,7 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testNonPublicStaticMethod()
 	{
-		$c = $this->makeCallback(array('Foo', 'prsf'));
+		$c = $this->makeCallback(array('CallbackTestBasicStub', 'prsf'));
 	}
 
 	public function testClosureCallable()
@@ -73,6 +73,18 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('bar', $c());
 	}
 
+	public function testSetupAndTeardownAreCalled()
+	{
+		$c = $this->makeCallback(array('CallbackTestPrePostStub', 'f'));
+		
+		$c->setUp();
+		$c->invoke();
+		$c->tearDown();
+
+		$this->assertTrue(CallbackTestPrePostStub::$setUp);
+		$this->assertTrue(CallbackTestPrePostStub::$tearDown);
+	}
+
 	/**
 	 * @expectedException InvalidArgumentException
 	 */
@@ -87,11 +99,24 @@ class CallbackTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-class Foo {
+class CallbackTestBasicStub {
 	public function pf() { return 'pf'; }
 	public static function psf() { return 'psf'; }
 	protected function prf() { return 'prf'; }
 	protected static function prsf() { return 'prsf'; }
+}
+class CallbackTestPrePostStub {
+	public static $setUp = false;
+	public static $tearDown = false;
+	public function setUp()
+	{
+		static::$setUp = true;
+	}
+	public function tearDown()
+	{
+		static::$tearDown = true;
+	}
+	public function f() {}
 }
 
 function bar() { return 'bar'; }

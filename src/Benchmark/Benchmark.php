@@ -40,11 +40,15 @@ class Benchmark
 
 	public function run()
 	{
+		$this->callback->setUp();
+
 		$start = microtime(true);
 
 		$this->invokeCallback();
 
 		$end = microtime(true);
+
+		$this->callback->tearDown();
 
 		$elapsed = $end - $start;
 

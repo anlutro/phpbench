@@ -12,6 +12,7 @@ namespace anlutro\PHPBench\Reflection;
 class Callback
 {
 	protected $class;
+	protected $instance;
 	protected $method;
 	protected $staticMethod;
 	protected $closure;
@@ -29,6 +30,8 @@ class Callback
 				$this->staticMethod = $method;
 			} else {
 				$this->method = $method;
+				$class = $this->class;
+				$this->instance = new $class;
 			}
 		} elseif ($callable instanceof \Closure) {
 			$this->closure = $callable;
@@ -50,6 +53,20 @@ class Callback
 		return $this->annotations;
 	}
 
+	public function setUp()
+	{
+		if ($this->instance && method_exists($this->instance, 'setUp')) {
+			$this->instance->setUp();
+		}
+	}
+
+	public function tearDown()
+	{
+		if ($this->instance && method_exists($this->instance, 'tearDown')) {
+			$this->instance->tearDown();
+		}
+	}
+
 	public function invoke()
 	{
 		if ($this->isStaticMethod()) {
@@ -57,10 +74,12 @@ class Callback
 			$method = $this->staticMethod;
 			return $class::$method();
 		} elseif ($this->isObjectMethod()) {
-			$class = $this->class;
+			if (!$this->instance) {
+				$class = $this->class;
+				$this->instance = new $class;
+			}
 			$method = $this->method;
-			$obj = new $class;
-			return $obj->$method();
+			return $this->instance->$method();
 		} elseif ($this->isClosure()) {
 			$closure = $this->closure;
 			return $closure();
